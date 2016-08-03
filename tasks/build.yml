@@ -13,23 +13,6 @@
     path: "{{ item }}"
   with_items:
     - "/home/{{ kafka.user }}/tmp"
-    - "/home/{{ kafka.user }}/log"
-    - "/home/{{ kafka.user }}/data"
-
-- name: Create /opt path
-  become: yes
-  file:
-    state: directory
-    path: "{{ item }}"
-    owner: "{{ kafka.user }}"
-  with_items:
-    - "/opt/kafka_{{ kafka.version_scala }}-{{ kafka.version_kafka }}/"
-
-- name: Remove lost+found in the datadir
-  become: yes
-  file:
-    path: "/home/{{ kafka.user }}/data/lost+found"
-    state: absent
 
 - name: Fetch kafka binary package
   become: yes
@@ -40,17 +23,27 @@
 
 - name: Uncompress the kafka tar
   become: yes
-  become_user: "{{ kafka.user }}"
   unarchive:
     copy: no
+    group: "{{ kafka.user }}"
+    owner: "{{ kafka.user }}"
+    creates: "/opt/kafka_{{ kafka.version_scala }}-{{ kafka.version_kafka }}"
     dest: "/opt/"
     src: "/home/{{ kafka.user }}/tmp/kafka_{{ kafka.version_scala }}-{{ kafka.version_kafka }}.tgz"
 
-- name: link config dir
+- name: Create data & log paths
   become: yes
-  become_user: "{{ kafka.user }}"
   file:
-    force: yes
-    path: "/home/{{ kafka.user }}/etc"
-    src: "/opt/kafka_{{ kafka.version_scala }}-{{ kafka.version_kafka }}/config"
-    state: link
+    state: directory
+    path: "{{ item }}"
+    owner: "{{ kafka.user }}"
+    group: "{{ kafka.user }}"
+  with_items:
+    - "{{ kafka_path }}/log"
+    - "{{ kafka_path }}/data"
+
+- name: Remove lost+found in the datadir
+  become: yes
+  file:
+    path: "{{ kafka_path }}/data/lost+found"
+    state: absent

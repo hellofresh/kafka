@@ -10,5 +10,5 @@ limit nofile 32768 32768
 # Rather than using setuid/setgid sudo is used because the pre-start task must run as root
 exec sudo -Hu {{ kafka.user }} -g {{ kafka.group }} \
     KAFKA_HEAP_OPTS="{{ kafka.heap_opts }}" \
-    /opt/kafka_{{ kafka.version_scala }}-{{ kafka.version_kafka }}/bin/kafka-server-start.sh \
-    /opt/kafka_{{ kafka.version_scala }}-{{ kafka.version_kafka }}/config/server.properties
+    {{ kafka_path }}/bin/kafka-server-start.sh \
+    {{ kafka_path }}/config/server.properties
