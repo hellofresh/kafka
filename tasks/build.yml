@@ -16,6 +16,15 @@
     - "/home/{{ kafka.user }}/log"
     - "/home/{{ kafka.user }}/data"
 
+- name: Create /opt path
+  become: yes
+  file:
+    state: directory
+    path: "{{ item }}"
+    owner: "{{ kafka.user }}"
+  with_items:
+    - "/opt/kafka_{{ kafka.version_scala }}-{{ kafka.version_kafka }}/"
+
 - name: Remove lost+found in the datadir
   become: yes
   file:
@@ -34,17 +43,8 @@
   become_user: "{{ kafka.user }}"
   unarchive:
     copy: no
-    creates: "/home/{{ kafka.user }}/kafka_{{ kafka.version_scala }}-{{ kafka.version_kafka }}"
-    dest: "/home/{{ kafka.user }}"
+    dest: "/opt/"
     src: "/home/{{ kafka.user }}/tmp/kafka_{{ kafka.version_scala }}-{{ kafka.version_kafka }}.tgz"
-
-- name: Link kafka to the right version
-  become: yes
-  become_user: "{{ kafka.user }}"
-  file:
-    path: "/home/{{ kafka.user }}/kafka"
-    src: "/home/{{ kafka.user }}/kafka_{{ kafka.version_scala }}-{{ kafka.version_kafka }}"
-    state: link
 
 - name: link config dir
   become: yes
@@ -52,5 +52,5 @@
   file:
     force: yes
     path: "/home/{{ kafka.user }}/etc"
-    src: "/home/{{ kafka.user }}/kafka/config"
+    src: "/opt/kafka_{{ kafka.version_scala }}-{{ kafka.version_kafka }}/config"
     state: link
