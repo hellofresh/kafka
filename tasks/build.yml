@@ -39,8 +39,8 @@
     owner: "{{ kafka.user }}"
     group: "{{ kafka.user }}"
   with_items:
-    - "{{ kafka_path }}/log"
-    - "{{ kafka_path }}/data"
+    - "{{ kafka.log_dir }}"
+    - "{{ kafka.data_dir }}/data"
 
 - name: Remove lost+found in the datadir
   become: yes

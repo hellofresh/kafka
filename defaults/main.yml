@@ -12,12 +12,12 @@ kafka:
   apache_mirror: http://apache.mirror.anlx.net/
   auto_create_topics: "false"
   conf_dir: "{{ kafka_path }}/config"
-  data_dir: "{{ kafka_path }}/data"
+  data_dir: "/var/kafka/data"
   group: kafka
   heap_opts: "-Xmx{{ (ansible_memtotal_mb / 2) | int }}m -Xms{{ (ansible_memtotal_mb / 2) | int }}m"
   hosts: "{{ kafka_hosts }}"
   log_cleanup_interval_mins: 1
-  log_dir: /home/kafka/log
+  log_dir: /var/log/kafka
   log_flush_interval_messages: 10000
   log_flush_interval_ms: 1000
   log_level: WARN
