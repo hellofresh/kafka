@@ -1,18 +1,9 @@
 ---
 
-# Needed to ensure some services start properly
-- name: Set hostname
-  become: yes
-  lineinfile:
-    dest: /etc/hosts
-    line: "127.0.0.1 {{ ansible_hostname }}"
-  notify:
-    - restart kafka
-
 - name: Overwrite the start script so the Java Opts can be changed if Kafka 0.8.1.1
   become: yes
   lineinfile:
-    dest: "/opt/kafka_2.9.2-{{ kafka.version_kafka }}/bin/kafka-server-start.sh"
+    dest: "{{ kafka_path }}/bin/kafka-server-start.sh"
     regexp: "^export KAFKA_HEAP_OPTS="
     line: "export KAFKA_HEAP_OPTS=\"{{ kafka.heap_opts }}\""
   notify:
@@ -52,7 +43,7 @@
   become: yes
   become_user: "{{ kafka.user }}"
   template:
-    dest: "/home/{{ kafka.user }}/etc/log4j.properties"
+    dest: "{{ kafka_path }}/config/log4j.properties"
     mode: 0644
     src: log4j.properties.j2
   notify:
@@ -62,7 +53,7 @@
   become: yes
   become_user: "{{ kafka.user }}"
   template:
-    dest: "/home/{{ kafka.user }}/etc/server.properties"
+    dest: "{{ kafka_path }}/config/server.properties"
     mode: 0640
     src: server.properties.j2
   notify:

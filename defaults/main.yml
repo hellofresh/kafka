@@ -1,16 +1,23 @@
 ---
 
+kafka_path                        : "/opt/kafka_{{ kafka_scala_version }}-{{ kafka_version }}"
+kafka_hosts                       : []
+kafka_zookeeper_hosts             : []
+kafka_zookeeper_chroot            : "/"
+kafka_version                     : "0.9.0.0"
+kafka_scala_version               : "2.11"
+kafka_zookeeper_port              : 2181
+
 kafka:
   apache_mirror: http://apache.mirror.anlx.net/
   auto_create_topics: "false"
-  conf_dir: /home/kafka/etc
-  data_dir: /home/kafka/data
+  conf_dir: "{{ kafka_path }}/config"
+  data_dir: "/var/kafka/data"
   group: kafka
   heap_opts: "-Xmx{{ (ansible_memtotal_mb / 2) | int }}m -Xms{{ (ansible_memtotal_mb / 2) | int }}m"
-  hosts:
-    - localhost
+  hosts: "{{ kafka_hosts }}"
   log_cleanup_interval_mins: 1
-  log_dir: /home/kafka/log
+  log_dir: /var/log/kafka
   log_flush_interval_messages: 10000
   log_flush_interval_ms: 1000
   log_level: WARN
@@ -29,8 +36,9 @@ kafka:
   upstart_conf: /etc/init/kafka.conf
   use_systemd: no
   user: kafka
-  version_kafka: "0.9.0.0"
-  version_scala: "2.11"
+  version_kafka: "{{ kafka_version }}"
+  version_scala: "{{ kafka_scala_version }}"
   zookeeper_connection_timeout_ms: 1000000
-  zookeeper_hosts:
-    - localhost
+  zookeeper_hosts: "{{ kafka_zookeeper_hosts }}"
+  zookeeper_chroot: "{{ kafka_zookeeper_chroot }}"
+  zookeeper_port: "{{ kafka_zookeeper_port }}"
