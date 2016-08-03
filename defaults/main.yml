@@ -34,3 +34,5 @@ kafka:
   zookeeper_connection_timeout_ms: 1000000
   zookeeper_hosts:
     - localhost
+  zookeeper_chroot: /
+  zookeeper_port: 2181
