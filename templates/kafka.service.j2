@@ -9,7 +9,7 @@ Group=kafka
 LimitNOFILE=32768
 Restart=on-failure
 Environment="KAFKA_HEAP_OPTS={{ kafka_heap_opts }}"
-ExecStart={{ kafka_path }}/bin/kafka-server-start.sh /etc/kafka/server.properties
+ExecStart={{ kafka_path }}/bin/kafka-server-start.sh {{ kafka_path }}/config/server.properties
 
 [Install]
 WantedBy=multi-user.target
