@@ -5,7 +5,7 @@ kafka_hosts                            : []
 kafka_zookeeper_hosts                  : []
 kafka_zookeeper_chroot                 : "/"
 kafka_version_kafka                    : "0.9.0.0"
-kafka_scala_version                    : "2.11"
+kafka_version_scala                    : "2.11"
 kafka_zookeeper_port                   : 2181
 kafka_message_max_byes                 : 100000000
 kafka_replica_fetch_max_byes           : 200000000
