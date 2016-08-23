@@ -7,40 +7,40 @@
 
 - name: Ensure install folders
   become: yes
-  become_user: "{{ kafka.user }}"
+  become_user: "{{ kafka_user }}"
   file:
     state: directory
     path: "{{ item }}"
   with_items:
-    - "/home/{{ kafka.user }}/tmp"
+    - "/home/{{ kafka_user }}/tmp"
 
 - name: Fetch kafka binary package
   become: yes
-  become_user: "{{ kafka.user }}"
+  become_user: "{{ kafka_user }}"
   get_url:
-    dest: "/home/{{ kafka.user }}/tmp/kafka_{{ kafka.version_scala }}-{{ kafka.version_kafka }}.tgz"
-    url: "{{ kafka.apache_mirror }}/kafka/{{ kafka.version_kafka }}/kafka_{{ kafka.version_scala }}-{{ kafka.version_kafka }}.tgz"
+    dest: "/home/{{ kafka_user }}/tmp/kafka_{{ kafka_version_scala }}-{{ kafka_version_kafka }}.tgz"
+    url: "{{ kafka_apache_mirror }}/kafka/{{ kafka_version_kafka }}/kafka_{{ kafka_version_scala }}-{{ kafka_version_kafka }}.tgz"
 
 - name: Uncompress the kafka tar
   become: yes
   unarchive:
     copy: no
-    group: "{{ kafka.user }}"
-    owner: "{{ kafka.user }}"
-    creates: "/opt/kafka_{{ kafka.version_scala }}-{{ kafka.version_kafka }}"
+    group: "{{ kafka_user }}"
+    owner: "{{ kafka_user }}"
+    creates: "/opt/kafka_{{ kafka_version_scala }}-{{ kafka_version_kafka }}"
     dest: "/opt/"
-    src: "/home/{{ kafka.user }}/tmp/kafka_{{ kafka.version_scala }}-{{ kafka.version_kafka }}.tgz"
+    src: "/home/{{ kafka_user }}/tmp/kafka_{{ kafka_version_scala }}-{{ kafka_version_kafka }}.tgz"
 
 - name: Create data & log paths
   become: yes
   file:
     state: directory
     path: "{{ item }}"
-    owner: "{{ kafka.user }}"
-    group: "{{ kafka.user }}"
+    owner: "{{ kafka_user }}"
+    group: "{{ kafka_user }}"
   with_items:
-    - "{{ kafka.log_dir }}"
-    - "{{ kafka.data_dir }}"
+    - "{{ kafka_log_dir }}"
+    - "{{ kafka_data_dir }}"
 
 - name: Remove lost+found in the datadir
   become: yes

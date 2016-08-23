@@ -5,43 +5,43 @@
   lineinfile:
     dest: "{{ kafka_path }}/bin/kafka-server-start.sh"
     regexp: "^export KAFKA_HEAP_OPTS="
-    line: "export KAFKA_HEAP_OPTS=\"{{ kafka.heap_opts }}\""
+    line: "export KAFKA_HEAP_OPTS=\"{{ kafka_heap_opts }}\""
   notify:
     - restart kafka
-  when: kafka.version_kafka == "0.8.1.1"
+  when: kafka_version_kafka == "0.8.1.1"
 
 - name: Create upstart config
   become: yes
   template:
-    dest: "{{ kafka.upstart_conf }}"
+    dest: "{{ kafka_upstart_conf }}"
     owner: root
     group: root
     mode: 0644
     src: kafka.conf.j2
   notify:
     - restart kafka
-  when: not kafka.use_systemd
+  when: not kafka_use_systemd
 
 - name: Create systemd config
   become: yes
   template:
-    dest: "{{ kafka.systemd_service }}"
+    dest: "{{ kafka_systemd_service }}"
     owner: root
     group: root
     mode: 0644
     src: kafka.service.j2
   notify:
     - restart kafka
-  when: kafka.use_systemd
+  when: kafka_use_systemd
 
 - name: Reload systemd
   become: yes
   command: systemctl daemon-reload
-  when: kafka.use_systemd
+  when: kafka_use_systemd
 
 - name: Create log4j.properties
   become: yes
-  become_user: "{{ kafka.user }}"
+  become_user: "{{ kafka_user }}"
   template:
     dest: "{{ kafka_path }}/config/log4j.properties"
     mode: 0644
@@ -51,7 +51,7 @@
 
 - name: Create server.properties
   become: yes
-  become_user: "{{ kafka.user }}"
+  become_user: "{{ kafka_user }}"
   template:
     dest: "{{ kafka_path }}/config/server.properties"
     mode: 0640
@@ -68,6 +68,6 @@
 
 - name: Wait for Kafka port
   wait_for:
-    port: "{{ kafka.port }}"
+    port: "{{ kafka_port }}"
     state: started
     timeout: 30
