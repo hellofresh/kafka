@@ -1,6 +1,6 @@
 ---
 
-kafka_path                             : "/opt/kafka_{{ kafka_version_scala }}-{{ kafka_version }}"
+kafka_path                             : "/opt/kafka_{{ kafka_version_scala }}-{{ kafka_version_kafka }}"
 kafka_hosts                            : []
 kafka_zookeeper_hosts                  : []
 kafka_zookeeper_chroot                 : "/"
